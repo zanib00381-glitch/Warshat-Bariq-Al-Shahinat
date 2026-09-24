@@ -1,0 +1,70 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Navy from the company logo */
+  --color-brand: #1f3a7a;
+  /* Gold/brown of the card title in the reference PDF */
+  --color-card-gold: #8c6508;
+  /* `font-sans` follows the UI language (used for typed data, so it never gets Nastaliq). */
+  --font-sans: var(--font-ui);
+}
+
+/* UI font per language: English → Noto Sans, Arabic → Noto Sans Arabic, Urdu → Nastaliq (below). */
+:root {
+  --font-ui: var(--font-arabic), system-ui, sans-serif;
+}
+html[lang="en"] {
+  --font-ui: var(--font-latin), var(--font-arabic), system-ui, sans-serif;
+}
+
+body {
+  background: #f5f7fb;
+  color: #1e293b;
+  font-family: var(--font-ui);
+}
+
+/* App UI switches to Nastaliq in Urdu. Elements marked lang="ar" keep the Arabic
+   font. The overrides use :where() (zero specificity) so they can never beat the
+   official card's own styles — the card must look identical in every UI language. */
+html[lang="ur"] body {
+  font-family: var(--font-urdu), var(--font-arabic), serif;
+  line-height: 2;
+}
+:where(html[lang="ur"] [lang="ar"]) {
+  font-family: var(--font-arabic), system-ui, sans-serif;
+  line-height: normal;
+}
+/* Nastaliq's small letters get hard to read at 12px; nudge the smallest UI text up in Urdu.
+   The card is unaffected (its sizes are set in pt on its own classes). */
+html[lang="ur"] .text-xs {
+  font-size: 0.8125rem;
+}
+/* Fields where the admin types data (often Latin/Arabic) keep a plain font. */
+:where(html[lang="ur"] :is(input, textarea)) {
+  font-family: var(--font-arabic), system-ui, sans-serif;
+  line-height: normal;
+}
+
+/* ---------- printing the official card ---------- */
+
+/* The card element opts into this page via `page: upd-card` (US Letter landscape, like the PDF). */
+@page upd-card {
+  size: letter landscape;
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+  }
+  .card-scaler {
+    height: auto !important;
+    overflow: visible !important;
+  }
+  .card-scaler-inner {
+    transform: none !important;
+    box-shadow: none !important;
+    --tw-ring-shadow: 0 0 #0000 !important;
+  }
+}

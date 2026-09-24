@@ -1,0 +1,138 @@
+{
+  "app": {
+    "title": "UPD Card System"
+  },
+  "nav": {
+    "newCard": "Issue card",
+    "cards": "Issued cards"
+  },
+  "language": {
+    "switch": "Change language"
+  },
+  "actions": {
+    "generate": "Generate card",
+    "downloadPdf": "Download PDF",
+    "copyLink": "Copy link",
+    "print": "Print",
+    "reset": "Clear form",
+    "view": "View",
+    "openVerify": "Open verification page",
+    "copyVerifyLink": "Copy verification link",
+    "createAnother": "Create another card",
+    "copied": "Copied ✓",
+    "close": "Close"
+  },
+  "form": {
+    "sectionManufacturer": "UPD manufacturer details",
+    "sectionVehicle": "Vehicle details",
+    "sectionNumber": "Distinguished under-run number",
+    "manufacturerName": "Manufacturer / workshop name",
+    "manufacturerCode": "Manufacturer assigned code",
+    "countryOfOrigin": "Country of origin",
+    "dateOfManufacture": "Date of manufacture",
+    "technicalReferences": "Technical references",
+    "vehicleModelName": "Vehicle model name",
+    "vehicleBrand": "Vehicle brand",
+    "vehicleModelYear": "Vehicle model year",
+    "updType": "UPD type",
+    "updFront": "Front",
+    "updSide": "Side",
+    "updRear": "Rear",
+    "chassisNumber": "Vehicle chassis number (VIN)",
+    "serial": "Serial number (9 characters)",
+    "fullNumberPreview": "Full number",
+    "cardIssueDate": "Card issue date",
+    "required": "This field is required",
+    "autoComputed": "Filled in automatically",
+    "manufacturerCodeHint": "3 characters (English letters or digits), shown in cells 4–6",
+    "vinHint": "10 to 17 English letters and digits",
+    "updTypeHint": "Choose one or more",
+    "updTypeCode": "Type code",
+    "numberHint": "Cells 1–7 fill in automatically. Enter the serial number in cells 8–16.",
+    "cellLabel": "Cell {n}",
+    "yearPlaceholder": "e.g. 2023"
+  },
+  "messages": {
+    "generating": "Generating card…",
+    "linkCopied": "Link copied",
+    "copyFailed": "Couldn't copy the link",
+    "duplicateNumber": "This number is already used. Please enter a different serial number.",
+    "invalidSerial": "The serial number must be exactly 9 English letters or digits",
+    "invalidUpdType": "Please choose at least one UPD type",
+    "invalidYear": "The model year must be between {min} and {max}",
+    "invalidDate": "Please enter a valid date",
+    "genericError": "Something went wrong. Please try again.",
+    "notFound": "Card not found",
+    "loading": "Loading…",
+    "noCards": "No cards have been issued yet",
+    "invalidVin": "The chassis number must be 10 to 17 English letters and digits",
+    "invalidManufacturerCode": "The manufacturer code must be 3 English letters or digits",
+    "fixErrors": "Please correct the fields highlighted in red",
+    "preparingPdf": "Preparing PDF…",
+    "pdfFailed": "Couldn't create the PDF. Please try again.",
+    "networkError": "Couldn't reach the server. Check your internet connection and try again — the card was not saved.",
+    "saveFailed": "Couldn't save the card. Please try again.",
+    "configError": "The server isn't fully configured. Please contact the system administrator."
+  },
+  "home": {
+    "title": "Issue a new card"
+  },
+  "cards": {
+    "title": "Issued cards",
+    "search": "Search by chassis number, brand or card number",
+    "brandModel": "Brand / model",
+    "actions": "Actions",
+    "count": "{n} cards",
+    "countFiltered": "{shown} of {n} cards",
+    "noResults": "No cards match your search",
+    "clearSearch": "Clear search"
+  },
+  "verify": {
+    "title": "UPD card verification",
+    "verified": "Verified — genuine card issued by the company",
+    "invalidDesc": "No card exists with this code. The card may be forged, or the link may be wrong.",
+    "pageTitle": "Truck & trailer under-run protection device card",
+    "manufactureDate": "UPD manufacture date",
+    "officialCard": "Official card",
+    "copyLink": "Copy this link",
+    "linkLabel": "Verification link for this card",
+    "notVerifiedTitle": "This card could not be verified",
+    "notVerifiedAdvice": "Do not rely on this card. For questions, please contact the issuer.",
+    "contactTitle": "Contact the issuer",
+    "errorTitle": "Couldn't reach the server",
+    "errorDesc": "We couldn't check this card right now. This does not mean the card is invalid — please try again shortly.",
+    "retry": "Try again"
+  },
+  "footer": {
+    "rights": "All rights reserved",
+    "contact": "Contact"
+  },
+  "preview": {
+    "title": "Card preview",
+    "created": "Card created and saved",
+    "verifyLink": "Verification link (encoded in the QR code)"
+  },
+  "auth": {
+    "loginTitle": "Admin sign-in",
+    "loginSubtitle": "For authorized workshop staff only",
+    "email": "Email",
+    "password": "Password",
+    "signIn": "Sign in",
+    "signingIn": "Signing in…",
+    "logout": "Sign out",
+    "missingFields": "Please enter your email and password",
+    "invalidCredentials": "Incorrect email or password",
+    "emailNotConfirmed": "This email address hasn't been confirmed yet",
+    "notAdmin": "This account doesn't have access to the admin panel",
+    "tooManyAttempts": "Too many attempts. Please wait a few minutes and try again.",
+    "sessionExpired": "Your session has expired, and the card was not saved.",
+    "loginAgain": "Sign in again",
+    "devModeNotice": "Local development mode: Supabase isn't set up yet, so no sign-in is needed and data is stored on this computer only.",
+    "continue": "Continue"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "desc": "The link you opened is wrong or no longer available.",
+    "home": "Back to the home page"
+  }
+}

@@ -1,0 +1,262 @@
+/*
+ * Replica of `CargoBarriersCard (286).pdf` — US Letter landscape, 792 × 612 pt.
+ * All measurements are in pt and were read from the reference PDF's own
+ * drawing/text coordinates, so 1pt here = 1pt in the original.
+ *
+ * The small `padding-top` / line-height nudges on text were calibrated by printing
+ * this card to PDF and comparing glyph baselines against the reference; the PDF's
+ * generator sits text slightly below the geometric center of each cell.
+ */
+
+.card {
+  position: relative;
+  width: 792pt;
+  height: 612pt;
+  overflow: hidden;
+  background: #fff;
+  color: #1f1f1f;
+  direction: ltr;
+  font-family: var(--font-latin), var(--font-arabic), sans-serif;
+  line-height: normal;
+  text-align: left;
+  print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+  page: upd-card;
+}
+
+/* Only elements explicitly marked lang="ar" — NOT :lang(ar), which would also match
+   everything by inheritance from <html lang="ar"> and make the card depend on the UI language. */
+.card [lang="ar"] {
+  font-family: var(--font-arabic), sans-serif;
+}
+
+/* ---------- top bar ---------- */
+
+.qr {
+  /* painted before the table, which overlaps its bottom quiet zone as in the reference */
+  position: absolute;
+  left: 48pt;
+  top: 10pt;
+  width: 68pt;
+  height: 68pt;
+  padding: 3.4pt; /* 18/360 of the image is quiet zone in the reference */
+  background: #fff;
+}
+
+.qr svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.logo {
+  position: absolute;
+  left: 648pt;
+  top: 12pt;
+  height: 54pt;
+  width: auto;
+}
+
+.close {
+  position: absolute;
+  left: 736pt;
+  top: 18pt;
+  width: 12pt;
+  height: 12pt;
+  display: block;
+}
+
+.titleAr,
+.titleEn,
+.subtitle {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.titleAr {
+  top: 10pt;
+  font-size: 16pt;
+  color: #8c6508;
+}
+
+.titleEn {
+  top: 34.8pt;
+  font-size: 11pt;
+  color: #8c6508;
+}
+
+.subtitle {
+  top: 48.4pt;
+  font-size: 9.5pt;
+  color: #1f1f1f;
+}
+
+/* ---------- table ---------- */
+
+.table {
+  position: absolute;
+  left: 36pt;
+  top: 74pt;
+  width: 714.3pt;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 114.1pt 481pt 116.8pt;
+  column-gap: 1.2pt;
+  margin-bottom: 2pt;
+  height: 30pt;
+}
+
+.tall {
+  height: 37pt;
+}
+
+.numberRow {
+  height: 42pt;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  background: #a6a6a6;
+  color: #fff;
+  font-size: 9pt;
+  line-height: 11pt;
+  white-space: pre-line;
+}
+
+.labelEn {
+  padding: 2.2pt 3pt 0 8pt;
+}
+
+.labelAr {
+  justify-content: flex-start; /* = right edge, since the cell is RTL */
+  padding: 5.4pt 7pt 0 4pt;
+  direction: rtl;
+  text-align: right;
+  font-weight: 700;
+}
+
+/* Latin characters inside Arabic labels, e.g. "(VIN)", are regular weight in the reference. */
+.latin {
+  font-weight: 400;
+}
+
+.numberRow .labelEn {
+  font-size: 8.5pt;
+}
+
+.value {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 3.8pt 8pt 0;
+  background: #f1f1f1;
+  font-size: 10pt;
+  line-height: 13pt;
+  text-align: center;
+  overflow: hidden;
+}
+
+.sectionHeading {
+  height: 24pt;
+  margin-top: -2pt; /* the heading sits directly under the previous row */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9.5pt;
+  color: #000;
+  white-space: nowrap;
+}
+
+/* ---------- 16-cell distinguished number ---------- */
+
+.numberCell {
+  background: #fff;
+  padding-top: 4pt;
+}
+
+.cells {
+  display: flex;
+}
+
+.cell {
+  width: 29.2pt;
+  margin-left: 1pt;
+  font-weight: 700;
+  text-align: center;
+}
+
+.cell:first-child,
+.joined {
+  margin-left: 0;
+}
+
+/* Cells 8 and 9 share one box in the reference, with their text slightly off-center. */
+.joinedLeft > * {
+  padding-left: 5pt;
+}
+
+.joined > * {
+  padding-right: 2pt;
+}
+
+.cellIndex {
+  height: 16pt;
+  line-height: 19.8pt;
+  background: #858585;
+  color: #fff;
+  font-size: 8pt;
+}
+
+.cellValue {
+  height: 18pt;
+  line-height: 21.6pt;
+  margin-top: 1pt;
+  background: #f1f1f1;
+  color: #1f1f1f;
+  font-size: 9pt;
+  white-space: nowrap;
+}
+
+/* ---------- footer ---------- */
+
+.rule {
+  position: absolute;
+  left: 36pt;
+  top: 518.6pt;
+  width: 715.3pt;
+  border-top: 0.8pt solid #bdbdbd;
+}
+
+.footerEn,
+.footerAr {
+  position: absolute;
+  top: 528.7pt;
+  font-size: 7.5pt;
+  line-height: 9.5pt;
+  color: #222;
+}
+
+.footerEn {
+  top: 527.9pt;
+  left: 36pt;
+  width: 350pt;
+}
+
+.footerAr {
+  right: 40.7pt;
+  width: 340pt;
+  direction: rtl;
+  text-align: right;
+}
+
+.footerEn p,
+.footerAr p {
+  margin: 0;
+}
