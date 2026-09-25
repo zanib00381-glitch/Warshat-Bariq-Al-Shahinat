@@ -12,3 +12,8 @@
   # secret scanner must not fail the build over them. The real secret,
   # SUPABASE_SERVICE_ROLE_KEY, is deliberately NOT listed and stays protected.
   SECRETS_SCAN_OMIT_KEYS = "NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY,NEXT_PUBLIC_SITE_URL"
+
+# Netlify's Next.js adapter: turns the build into server functions (pages, API
+# routes, auth proxy). Without it only static files get deployed and every page 404s.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
