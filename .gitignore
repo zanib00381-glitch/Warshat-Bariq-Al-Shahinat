@@ -43,3 +43,6 @@ next-env.d.ts
 
 # local dev card store (used when Supabase isn't configured)
 /.data/
+
+# Netlify CLI local link state
+.netlify
