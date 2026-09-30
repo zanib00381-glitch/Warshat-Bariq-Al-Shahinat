@@ -1,13 +1,15 @@
 import type { NextRequest } from "next/server";
 import { getAdmin, isSameOrigin } from "@/lib/auth";
+import { photoKindsFor, PHOTO_KINDS, type PhotoKind } from "@/lib/barrier-photos";
 import { getCardStore } from "@/lib/card-store";
 import { normalizeCardInput, validateCardInput, type CardField } from "@/lib/card-validation";
-import { generateCardId, todayInRiyadh, verificationUrl, type CardErrorCode } from "@/lib/cards";
+import { generateCardId, generateCardNumber, todayInRiyadh, verificationUrl, type CardErrorCode } from "@/lib/cards";
+import { isAcceptablePhoto, storeBarrierPhotos } from "@/lib/photo-storage";
 import { qrSvgFor } from "@/lib/qr";
 import { buildCountryManufacturerPrefix, buildUnderRunNumber } from "@/lib/under-run-number";
 import { COMPANY } from "@/config/company";
 
-function fail(code: CardErrorCode, status: number, field?: CardField) {
+function fail(code: CardErrorCode, status: number, field?: CardField | `${PhotoKind}_photo`) {
   return Response.json({ error: code, field }, { status });
 }
 
@@ -28,9 +30,21 @@ export async function POST(request: NextRequest) {
   const admin = await getAdmin();
   if (!admin) return fail("UNAUTHORIZED", 401);
 
+  // multipart/form-data: a "card" JSON field plus optional "side_photo" / "rear_photo"
+  // files. Plain JSON (no pictures) is accepted too.
   let body: Record<string, unknown>;
+  const photos: Partial<Record<PhotoKind, File>> = {};
   try {
-    body = await request.json();
+    if ((request.headers.get("content-type") ?? "").includes("multipart/form-data")) {
+      const form = await request.formData();
+      body = JSON.parse(String(form.get("card") ?? "{}"));
+      for (const kind of PHOTO_KINDS) {
+        const file = form.get(`${kind}_photo`);
+        if (file instanceof File && file.size > 0) photos[kind] = file;
+      }
+    } else {
+      body = await request.json();
+    }
   } catch {
     return fail("MISSING_FIELDS", 400);
   }
@@ -49,6 +63,14 @@ export async function POST(request: NextRequest) {
     return Response.json({ error: code, field, fieldErrors: Object.fromEntries(errors) }, { status: 400 });
   }
 
+  // Keep only pictures that match the chosen barrier types, and check they're real images.
+  const allowedKinds = photoKindsFor(input.upd_type);
+  for (const kind of PHOTO_KINDS) {
+    if (!photos[kind]) continue;
+    if (!allowedKinds.includes(kind)) delete photos[kind];
+    else if (!(await isAcceptablePhoto(photos[kind]))) return fail("INVALID_PHOTO", 400, `${kind}_photo`);
+  }
+
   const number = buildUnderRunNumber(
     buildCountryManufacturerPrefix(COMPANY.country_code, input.manufacturer_code),
     input.upd_type,
@@ -65,17 +87,23 @@ export async function POST(request: NextRequest) {
       return fail("CONFIG_ERROR", 500);
     }
 
-    // Retry on the (astronomically unlikely) event of an ID collision.
-    for (let attempt = 0; attempt < 3; attempt++) {
+    // Pictures are stored first; if the card then can't be saved they're deleted again.
+    const stored = await storeBarrierPhotos(photos);
+
+    // Retry when a random id or card number happens to collide with an existing one.
+    for (let attempt = 0; attempt < 5; attempt++) {
       const id = generateCardId();
       const qrUrl = verificationUrl(origin, id);
       const result = await store.insert({
         id,
+        card_number: generateCardNumber(),
         ...input,
         under_run_number_full: number.full,
         under_run_number_prefix: number.prefix,
         under_run_number_suffix: number.suffix,
         qr_url: qrUrl,
+        side_photo_url: stored.urls.side ?? null,
+        rear_photo_url: stored.urls.rear ?? null,
         created_by: admin.email,
       });
 
@@ -83,10 +111,12 @@ export async function POST(request: NextRequest) {
         return Response.json({ card: result.card, qr_svg: await qrSvgFor(qrUrl) }, { status: 201 });
       }
       if (result.conflict === "number") {
+        await stored.cleanup();
         return fail("DUPLICATE_NUMBER", 409, "under_run_number_suffix"); // lost a race with another insert
       }
     }
-    throw new Error("Could not allocate a unique card id");
+    await stored.cleanup();
+    throw new Error("Could not allocate a unique card id / card number");
   } catch (err) {
     console.error("POST /api/cards failed:", err);
     return fail("SERVER_ERROR", 500);

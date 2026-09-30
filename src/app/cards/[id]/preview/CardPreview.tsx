@@ -42,7 +42,7 @@ export function CardPreview({ card, qrSvg, justCreated }: Props) {
     setPdfBusy(true);
     setStatus({ key: "messages.preparingPdf" });
     try {
-      await downloadCardPdf(cardRef.current, card.under_run_number_full);
+      await downloadCardPdf(cardRef.current, card.card_number);
       setStatus(null);
     } catch (err) {
       console.error("PDF export failed:", err);
@@ -62,7 +62,15 @@ export function CardPreview({ card, qrSvg, justCreated }: Props) {
       />
       <div className="mb-6 space-y-4 print:hidden">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold text-brand">{t("preview.title")}</h1>
+          <div>
+            <h1 className="text-2xl font-bold text-brand">{t("preview.title")}</h1>
+            <p className="mt-1 text-sm text-slate-600">
+              {t("verify.cardTitle")}:{" "}
+              <b dir="ltr" className="font-mono text-base text-slate-900">
+                {card.card_number}
+              </b>
+            </p>
+          </div>
           <Link href="/" className="text-sm font-semibold text-brand hover:underline">
             + {t("actions.createAnother")}
           </Link>

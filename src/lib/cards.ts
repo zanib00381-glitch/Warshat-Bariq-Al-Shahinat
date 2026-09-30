@@ -3,6 +3,8 @@ import { customAlphabet } from "nanoid";
 /** Row shape of the `upd_cards` table (see supabase/schema.sql). */
 export type UpdCard = {
   id: string;
+  /** "Barrier Unique ID Card" number: 10 digits, unique. Also the PDF file name. */
+  card_number: string;
   manufacturer_name: string;
   manufacturer_code: string;
   country_of_origin: string;
@@ -20,6 +22,9 @@ export type UpdCard = {
   created_at: string;
   created_by: string | null;
   qr_url: string;
+  /** Uploaded barrier pictures; null = show the default picture. */
+  side_photo_url: string | null;
+  rear_photo_url: string | null;
 };
 
 /** What may be shown publicly (verification page, public API): everything except internal fields. */
@@ -40,6 +45,7 @@ export type CardErrorCode =
   | "INVALID_VIN"
   | "INVALID_MANUFACTURER_CODE"
   | "DUPLICATE_NUMBER"
+  | "INVALID_PHOTO"
   | "NOT_FOUND"
   | "UNAUTHORIZED"
   | "CONFIG_ERROR"
@@ -52,6 +58,15 @@ export const generateCardId = customAlphabet(
 );
 
 export const CARD_ID_PATTERN = /^[0-9A-Za-z]{12}$/;
+
+export const CARD_NUMBER_PATTERN = /^[1-9][0-9]{9}$/;
+
+/** Random 10-digit "Barrier Unique ID Card" number (no leading zero). Uniqueness is enforced by the database. */
+export function generateCardNumber(): string {
+  const [a, b] = crypto.getRandomValues(new Uint32Array(2));
+  // First digit 1–9, then 9 digits 000000000–999999999 (modulo bias is negligible).
+  return String((a % 9) + 1) + String(b % 1_000_000_000).padStart(9, "0");
+}
 
 /** Today's date in Saudi Arabia, as YYYY-MM-DD. */
 export function todayInRiyadh(): string {

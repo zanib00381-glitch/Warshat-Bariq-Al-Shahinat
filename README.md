@@ -178,6 +178,17 @@ Ways to get the card out:
 - **Download PDF:** runs entirely in the browser. The browser draws the card itself, so Arabic letters join correctly. It embeds only the fonts the card uses, at about 290 dpi.
 - **QR code:** generated from the saved `qr_url`. The same URL always gives the same code, so the image isn't stored.
 
+## Barrier Unique ID Card number, company details and pictures
+
+- **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's the big number on the verification page, it's shown in the admin list and search, and **it's the PDF file name** (`3426822545.pdf`).
+- **Company section:** the verification page shows the company's address and applicant type from [`src/config/company.ts`](src/config/company.ts) (`address_en`, `address_ar`, `applicant_type`). ⚠ Make sure the address is your workshop's own.
+- **Barrier pictures:** when **Side** and/or **Rear** is selected in the form, an upload box appears for that picture.
+  - Photos are shrunk in the browser (max 1600 px, JPEG) before upload.
+  - The server checks they're real JPEG/PNG/WEBP files, up to 3 MB, and stores them in the public `barrier-photos` Supabase bucket.
+  - Without an upload, the default picture is shown, labelled "Illustrative image". The defaults are `public/barriers/side-default.svg` and `rear-default.svg`; replace them with your own files, or point `default_barrier_photos` in `company.ts` at different ones.
+
+**Existing databases:** if your project was set up with an older `schema.sql`, run [`supabase/migrations/002_card_number_and_photos.sql`](supabase/migrations/002_card_number_and_photos.sql) once in the SQL Editor **before deploying this version**. It adds the card number (existing cards get one automatically), the photo columns and the storage bucket. It's safe to run more than once.
+
 ## Distinguished Under-Run Number (16 cells)
 
 | Cells | Content | Source |

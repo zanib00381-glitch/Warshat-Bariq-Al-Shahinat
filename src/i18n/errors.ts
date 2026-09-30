@@ -11,6 +11,7 @@ export const ERROR_MESSAGE_KEYS: Record<CardErrorCode, TranslationKey> = {
   INVALID_VIN: "messages.invalidVin",
   INVALID_MANUFACTURER_CODE: "messages.invalidManufacturerCode",
   DUPLICATE_NUMBER: "messages.duplicateNumber",
+  INVALID_PHOTO: "messages.invalidPhoto",
   NOT_FOUND: "messages.notFound",
   UNAUTHORIZED: "auth.sessionExpired",
   CONFIG_ERROR: "messages.configError",

@@ -29,7 +29,7 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
       cards.map((c) => ({
         card: c,
         haystack: normalize(
-          [c.vehicle_chassis_number, c.vehicle_brand, c.vehicle_model_name, c.under_run_number_full].join("|"),
+          [c.card_number, c.vehicle_chassis_number, c.vehicle_brand, c.vehicle_model_name, c.under_run_number_full].join("|"),
         ),
       })),
     [cards],
@@ -52,7 +52,7 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
   // Once the off-screen card has rendered, export it with the same code as the preview page.
   useEffect(() => {
     if (!exporting || !exportRef.current) return;
-    downloadCardPdf(exportRef.current, exporting.card.under_run_number_full)
+    downloadCardPdf(exportRef.current, exporting.card.card_number)
       .catch((err) => {
         console.error("PDF export failed:", err);
         setPdfError(true);
@@ -107,7 +107,10 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
         <ul className="grid gap-3 md:hidden">
           {visible.map((card) => (
             <li key={card.id} className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm">
-              <div className="font-mono text-sm font-bold text-slate-900">
+              <div className="text-xs text-slate-500">
+                {t("cards.cardNumber")} <b dir="ltr" className="font-mono text-sm text-slate-900">{card.card_number}</b>
+              </div>
+              <div className="mt-1 font-mono text-sm font-bold text-slate-900">
                 <span dir="ltr">{card.under_run_number_full}</span>
               </div>
               <div className="mt-1 font-mono text-sm text-slate-600">
@@ -130,6 +133,7 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
           <table className="w-full text-sm">
             <thead className="bg-slate-50 text-slate-600">
               <tr className="text-start">
+                <th className="px-4 py-3 text-start font-semibold">{t("cards.cardNumber")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("form.chassisNumber")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("cards.brandModel")}</th>
                 <th className="px-4 py-3 text-start font-semibold">{t("form.sectionNumber")}</th>
@@ -140,6 +144,9 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
             <tbody className="divide-y divide-slate-100">
               {visible.map((card) => (
                 <tr key={card.id} className="hover:bg-slate-50">
+                  <td className="px-4 py-3 font-mono font-semibold">
+                    <span dir="ltr">{card.card_number}</span>
+                  </td>
                   <td className="px-4 py-3 font-mono">
                     <span dir="ltr">{card.vehicle_chassis_number}</span>
                   </td>

@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" role="img" aria-label="Side under-run protection device (illustration)">
+  <rect width="800" height="600" fill="#f4f6fa"/>
+  <!-- ground -->
+  <rect x="0" y="470" width="800" height="130" fill="#e3e8f0"/>
+  <line x1="0" y1="470" x2="800" y2="470" stroke="#c5cedb" stroke-width="3"/>
+  <!-- trailer box -->
+  <rect x="70" y="150" width="480" height="210" rx="6" fill="#ffffff" stroke="#1f3a7a" stroke-width="6"/>
+  <line x1="70" y1="330" x2="550" y2="330" stroke="#1f3a7a" stroke-width="4" opacity=".35"/>
+  <!-- chassis -->
+  <rect x="60" y="360" width="660" height="22" rx="4" fill="#1f3a7a"/>
+  <!-- cab -->
+  <path d="M570 360 V205 q0-25 25-25 h55 q35 0 55 40 l30 60 q10 20 10 45 V360 Z" fill="#ffffff" stroke="#1f3a7a" stroke-width="6" stroke-linejoin="round"/>
+  <path d="M600 205 h48 q22 0 35 28 l20 42 h-103 Z" fill="#cfe0f7" stroke="#1f3a7a" stroke-width="4" stroke-linejoin="round"/>
+  <rect x="690" y="315" width="42" height="16" rx="4" fill="#f5b942"/>
+  <!-- wheels -->
+  <g fill="#27364f" stroke="#1f3a7a" stroke-width="4">
+    <circle cx="130" cy="420" r="46"/><circle cx="235" cy="420" r="46"/><circle cx="660" cy="420" r="46"/>
+  </g>
+  <g fill="#b9c3d3"><circle cx="130" cy="420" r="16"/><circle cx="235" cy="420" r="16"/><circle cx="660" cy="420" r="16"/></g>
+  <!-- SIDE UNDER-RUN GUARD (highlighted) between the axles -->
+  <g>
+    <rect x="296" y="378" width="12" height="54" fill="#d9480f"/>
+    <rect x="420" y="378" width="12" height="54" fill="#d9480f"/>
+    <rect x="540" y="378" width="12" height="54" fill="#d9480f"/>
+    <rect x="286" y="392" width="280" height="14" rx="4" fill="#f76707" stroke="#d9480f" stroke-width="3"/>
+    <rect x="286" y="420" width="280" height="14" rx="4" fill="#f76707" stroke="#d9480f" stroke-width="3"/>
+  </g>
+  <path d="M426 500 V448" stroke="#d9480f" stroke-width="4" stroke-dasharray="6 6"/>
+  <rect x="290" y="500" width="272" height="46" rx="23" fill="#d9480f"/>
+  <text x="426" y="530" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" fill="#ffffff">SIDE BARRIER</text>
+</svg>

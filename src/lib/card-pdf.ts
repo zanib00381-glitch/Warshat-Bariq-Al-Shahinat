@@ -8,10 +8,10 @@
 const PAGE_WIDTH_PT = 792; // US Letter landscape, same as the reference PDF
 const PAGE_HEIGHT_PT = 612;
 
-/** Downloads the rendered card element as a one-page PDF named after its under-run number. */
-export async function downloadCardPdf(cardEl: HTMLElement, underRunNumberFull: string) {
-  const fileName = `UPD-Card-${underRunNumberFull.replace(/[^A-Z0-9]/gi, "")}.pdf`;
-  const title = `UPD Card ${underRunNumberFull}`;
+/** Downloads the rendered card element as a one-page PDF named after its "Barrier Unique ID Card" number. */
+export async function downloadCardPdf(cardEl: HTMLElement, cardNumber: string) {
+  const fileName = `${cardNumber}.pdf`;
+  const title = `Barrier Unique ID Card ${cardNumber}`;
   const [{ toPng }, { jsPDF }] = await Promise.all([import("html-to-image"), import("jspdf")]);
   await document.fonts.ready;
 

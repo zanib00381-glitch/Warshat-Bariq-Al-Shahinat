@@ -5,6 +5,12 @@ create table if not exists public.upd_cards (
   -- Short, URL-safe public id used in the verification link: /verify/<id>
   id                       text primary key check (id ~ '^[0-9A-Za-z]{12}$'),
 
+  -- "Barrier Unique ID Card" number shown on the verification page and used as the
+  -- PDF file name: 10 digits, never starting with 0, unique across all cards.
+  card_number              text not null,
+  constraint upd_cards_card_number_key unique (card_number),
+  constraint upd_cards_card_number_format check (card_number ~ '^[1-9][0-9]{9}$'),
+
   -- Manufacturer info: defaults mirror src/config/company.ts, but each card
   -- stores its own copy so historical cards stay accurate if details change.
   manufacturer_name        text not null default 'ورشة بريق الشاحنات',
@@ -31,7 +37,12 @@ create table if not exists public.upd_cards (
   card_issue_date          date not null default ((now() at time zone 'Asia/Riyadh')::date),
   created_at               timestamptz not null default now(),
   created_by               text,
-  qr_url                   text not null
+  qr_url                   text not null,
+
+  -- Barrier pictures (public URLs in the barrier-photos bucket). NULL = show the
+  -- default picture configured in src/config/company.ts.
+  side_photo_url           text,
+  rear_photo_url           text
 );
 
 create index if not exists upd_cards_created_at_idx on public.upd_cards (created_at desc);
@@ -40,3 +51,9 @@ create index if not exists upd_cards_chassis_idx on public.upd_cards (vehicle_ch
 -- Lock the table down: RLS on with no policies means the anon key can neither
 -- read nor write. The app accesses it server-side with the service-role key.
 alter table public.upd_cards enable row level security;
+
+-- Public bucket for barrier pictures shown on the verification page. Uploads go
+-- through the server with the secret key; anyone may view a picture by its URL.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values ('barrier-photos', 'barrier-photos', true, 3145728, array['image/jpeg', 'image/png', 'image/webp'])
+on conflict (id) do nothing;

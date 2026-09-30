@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import { DEFAULT_TECHNICAL_REFERENCES } from "@/config/card-template";
 import { COMPANY } from "@/config/company";
 import { ERROR_MESSAGE_KEYS } from "@/i18n/errors";
@@ -16,9 +16,11 @@ import {
   type CardInput,
   type FieldErrors,
 } from "@/lib/card-validation";
+import { photoKindsFor, type PhotoKind } from "@/lib/barrier-photos";
 import { todayInRiyadh, type CardErrorCode, type UpdCard } from "@/lib/cards";
 import { SERIAL_LENGTH, buildUpdType, type UpdSides } from "@/lib/under-run-number";
 import { Spinner } from "@/components/Spinner";
+import { BarrierPhotoPicker } from "./BarrierPhotoPicker";
 import { UnderRunNumberInput } from "./UnderRunNumberInput";
 
 type TextFields = Exclude<CardField, "upd_type" | "under_run_number_suffix">;
@@ -59,13 +61,14 @@ export function CardForm() {
   const [formMessage, setFormMessage] = useState<TranslationKey | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const [sessionExpired, setSessionExpired] = useState(false);
+  const [photos, setPhotos] = useState<Record<PhotoKind, File | null>>({ side: null, rear: null });
+  const [photoErrors, setPhotoErrors] = useState<Partial<Record<PhotoKind, CardErrorCode>>>({});
 
   const updType = buildUpdType(sides);
-  const input: CardInput = useMemo(
-    () => normalizeCardInput({ ...values, upd_type: updType, under_run_number_suffix: serial.join("") }),
-    [values, updType, serial],
-  );
-  const clientErrors = useMemo(() => validateCardInput(input), [input]);
+  const photoKinds = photoKindsFor(updType);
+  // Cheap to recompute; the React Compiler memoizes it anyway.
+  const input: CardInput = normalizeCardInput({ ...values, upd_type: updType, under_run_number_suffix: serial.join("") });
+  const clientErrors = validateCardInput(input);
   const errors: FieldErrors = showErrors ? { ...clientErrors, ...serverErrors } : serverErrors;
 
   const fixedCells = [...`${COMPANY.country_code}${input.manufacturer_code.padEnd(3, " ")}`.slice(0, 6)].map((c) =>
@@ -86,6 +89,8 @@ export function CardForm() {
     setValues(initialValues());
     setSides(EMPTY_SIDES);
     setSerial(emptySerial());
+    setPhotos({ side: null, rear: null });
+    setPhotoErrors({});
     setServerErrors({});
     setShowErrors(false);
     setFormMessage(null);
@@ -103,13 +108,17 @@ export function CardForm() {
     setSubmitting(true);
     setSessionExpired(false);
     setFormMessage("messages.generating");
+    // Card data as JSON plus the pictures chosen for the selected barrier types.
+    const payload = new FormData();
+    payload.append("card", JSON.stringify(input));
+    for (const kind of photoKinds) {
+      const file = photos[kind];
+      if (file) payload.append(`${kind}_photo`, file, file.name);
+    }
+
     let res: Response;
     try {
-      res = await fetch("/api/cards", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(input),
-      });
+      res = await fetch("/api/cards", { method: "POST", body: payload });
     } catch {
       // Offline, DNS failure, connection dropped… — nothing was saved.
       setFormMessage("messages.networkError");
@@ -118,9 +127,10 @@ export function CardForm() {
     }
 
     // Error pages from proxies/CDNs may not be JSON.
-    const body: { card?: UpdCard; error?: CardErrorCode; field?: CardField; fieldErrors?: FieldErrors } = await res
+    const body: { card?: UpdCard; error?: CardErrorCode; field?: string; fieldErrors?: FieldErrors } = await res
       .json()
       .catch(() => ({}));
+    const photoField = body.field?.endsWith("_photo") ? (body.field.replace("_photo", "") as PhotoKind) : null;
 
     if (res.ok && body.card) {
       router.push(`/cards/${body.card.id}/preview?created=1`); // spinner stays until the preview renders
@@ -129,10 +139,13 @@ export function CardForm() {
     if (res.status === 401) {
       setSessionExpired(true);
       setFormMessage("auth.sessionExpired");
+    } else if (photoField && body.error) {
+      setPhotoErrors({ [photoField]: body.error });
+      setFormMessage(ERROR_MESSAGE_KEYS[body.error]);
     } else if (body.field && body.error) {
       setServerErrors(body.fieldErrors ?? { [body.field]: body.error });
       setFormMessage(ERROR_MESSAGE_KEYS[body.error]);
-      focusField(body.field);
+      focusField(body.field as CardField);
     } else {
       setFormMessage(body.error ? ERROR_MESSAGE_KEYS[body.error] : "messages.saveFailed");
     }
@@ -203,6 +216,30 @@ export function CardForm() {
             </span>
           </div>
         </Field>
+        <div className="sm:col-span-2">
+          <p className="mb-2 text-sm font-semibold text-slate-700">{t("form.photosTitle")}</p>
+          {photoKinds.length === 0 ? (
+            <p className="rounded-lg border border-dashed border-slate-300 p-3 text-sm text-slate-500">{t("form.photosNoneNote")}</p>
+          ) : (
+            <>
+              <div className="grid gap-3 lg:grid-cols-2">
+                {photoKinds.map((kind) => (
+                  <BarrierPhotoPicker
+                    key={kind}
+                    kind={kind}
+                    file={photos[kind]}
+                    onChange={(file) => {
+                      setPhotos((p) => ({ ...p, [kind]: file }));
+                      setPhotoErrors(({ [kind]: _removed, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+                    }}
+                    error={photoErrors[kind] ? t(ERROR_MESSAGE_KEYS[photoErrors[kind]]) : null}
+                  />
+                ))}
+              </div>
+              <p className="mt-1 text-xs text-slate-500">{t("form.photoHint")}</p>
+            </>
+          )}
+        </div>
       </Section>
 
       <Section title={t("form.sectionNumber")}>

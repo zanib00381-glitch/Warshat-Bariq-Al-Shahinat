@@ -5,7 +5,7 @@ import type { UpdCard } from "./cards";
 import { getSupabaseAdmin } from "./supabase-server";
 
 export type NewCard = Omit<UpdCard, "created_at" | "created_by"> & { created_by?: string | null };
-export type InsertResult = { ok: true; card: UpdCard } | { ok: false; conflict: "id" | "number" };
+export type InsertResult = { ok: true; card: UpdCard } | { ok: false; conflict: "id" | "number" | "card_number" };
 
 /** Persistence for UPD cards. Supabase in real use; a local JSON file as a dev-only fallback. */
 export interface CardStore {
@@ -34,8 +34,10 @@ const supabaseStore: CardStore = {
     const { data, error } = await getSupabaseAdmin().from("upd_cards").insert(card).select().single<UpdCard>();
     if (!error) return { ok: true, card: data };
     if (error.code === "23505") {
-      // unique_violation — tell apart the under-run number from the primary key
-      return { ok: false, conflict: error.message.includes("under_run_number_full") ? "number" : "id" };
+      // unique_violation — which unique value collided?
+      if (error.message.includes("under_run_number_full")) return { ok: false, conflict: "number" };
+      if (error.message.includes("card_number")) return { ok: false, conflict: "card_number" };
+      return { ok: false, conflict: "id" };
     }
     throw error;
   },
@@ -82,6 +84,7 @@ const localFileStore: CardStore = {
       if (cards.some((c) => c.under_run_number_full === card.under_run_number_full)) {
         return { ok: false, conflict: "number" } as const;
       }
+      if (cards.some((c) => c.card_number === card.card_number)) return { ok: false, conflict: "card_number" } as const;
       const saved: UpdCard = { created_by: null, ...card, created_at: new Date().toISOString() };
       await mkdir(path.dirname(LOCAL_FILE), { recursive: true });
       await writeFile(LOCAL_FILE, JSON.stringify([saved, ...cards], null, 2));
@@ -92,9 +95,13 @@ const localFileStore: CardStore = {
 
 let warned = false;
 
+/** True when the server can reach Supabase with the secret key (data + photo storage). */
+export function isSupabaseDataConfigured(): boolean {
+  return Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+}
+
 export function getCardStore(): CardStore {
-  const hasSupabase = Boolean(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
-  if (hasSupabase) return supabaseStore;
+  if (isSupabaseDataConfigured()) return supabaseStore;
   if (process.env.NODE_ENV === "production") {
     throw new Error("Supabase is not configured — set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY");
   }
