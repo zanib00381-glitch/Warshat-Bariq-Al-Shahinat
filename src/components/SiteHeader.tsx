@@ -21,6 +21,9 @@ export function SiteHeader() {
   // Only real admin routes get the admin nav + logout (not /verify, /login or unknown URLs).
   const isAdmin = pathname === "/" || pathname.startsWith("/admin") || pathname.startsWith("/cards/");
 
+  // The public record page (/verify) has its own header/footer, like the client's reference page.
+  if (pathname.startsWith("/verify")) return null;
+
   const navLinks = [
     { href: "/", label: t("nav.newCard") },
     { href: "/admin/cards", label: t("nav.cards") },

@@ -12,6 +12,8 @@ export type UpdCard = {
   technical_references: string;
   vehicle_model_name: string;
   vehicle_brand: string;
+  /** نوع المركبة, e.g. شاحنة / مقطورة. */
+  vehicle_type: string;
   vehicle_model_year: string;
   upd_type: string;
   vehicle_chassis_number: string;

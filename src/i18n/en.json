@@ -60,7 +60,8 @@
     "defaultPhotoNote": "No image chosen — the default picture will be shown.",
     "photoHint": "JPG, PNG or WEBP. Large photos are resized automatically.",
     "photosNoneNote": "Select Side and/or Rear above to add barrier pictures.",
-    "defaultBadge": "Default"
+    "defaultBadge": "Default",
+    "vehicleType": "Vehicle type"
   },
   "messages": {
     "generating": "Generating card…",
@@ -101,35 +102,8 @@
     "cardNumber": "Card no."
   },
   "verify": {
-    "title": "UPD card verification",
-    "invalidDesc": "No card exists with this code. The card may be forged, or the link may be wrong.",
-    "manufactureDate": "UPD manufacture date",
-    "officialCard": "Official card",
-    "copyLink": "Copy this link",
-    "linkLabel": "Verification link for this card",
-    "notVerifiedTitle": "This card could not be verified",
-    "notVerifiedAdvice": "Do not rely on this card. For questions, please contact the issuer.",
     "contactTitle": "Contact the issuer",
-    "errorTitle": "Couldn't reach the server",
-    "errorDesc": "We couldn't check this card right now. This does not mean the card is invalid — please try again shortly.",
-    "retry": "Try again",
-    "cardTitle": "Barrier Unique ID Card",
-    "companyName": "Company name",
-    "address": "Address",
-    "applicantType": "Applicant type",
-    "issuanceDate": "Issuance date",
-    "status": "Status",
-    "statusValid": "Valid",
-    "cardData": "Card data",
-    "brandName": "Brand name",
-    "deviceType": "Protective device type",
-    "updSerial": "UPD serial number",
-    "updUnique": "UPD unique number",
-    "frontBarrier": "Front barrier",
-    "sideBarrier": "Side barrier",
-    "rearBarrier": "Rear barrier",
-    "illustrative": "Illustrative image",
-    "viewImage": "View image"
+    "cardTitle": "Barrier Unique ID Card"
   },
   "footer": {
     "rights": "All rights reserved",

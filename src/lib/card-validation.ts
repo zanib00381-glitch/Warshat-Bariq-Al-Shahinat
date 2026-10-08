@@ -14,6 +14,7 @@ export type CardInput = {
   technical_references: string;
   vehicle_model_name: string;
   vehicle_brand: string;
+  vehicle_type: string;
   vehicle_model_year: string;
   upd_type: string;
   vehicle_chassis_number: string;
@@ -35,6 +36,7 @@ const CARD_FIELDS: Record<CardField, true> = {
   technical_references: true,
   vehicle_model_name: true,
   vehicle_brand: true,
+  vehicle_type: true,
   vehicle_model_year: true,
   upd_type: true,
   vehicle_chassis_number: true,
@@ -75,6 +77,7 @@ export function validateCardInput(input: CardInput): FieldErrors {
   check("date_of_manufacture", isValidIsoDate(input.date_of_manufacture), "INVALID_DATE");
   check("vehicle_model_name", true, "MISSING_FIELDS");
   check("vehicle_brand", true, "MISSING_FIELDS");
+  check("vehicle_type", true, "MISSING_FIELDS");
   const year = Number(input.vehicle_model_year);
   check(
     "vehicle_model_year",

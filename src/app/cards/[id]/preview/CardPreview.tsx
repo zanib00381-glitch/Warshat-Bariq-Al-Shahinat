@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable @next/next/no-img-element -- barrier pictures come from Supabase Storage or /public */
+
 import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { CardScaler } from "@/components/card/CardScaler";
@@ -8,6 +10,7 @@ import { Spinner } from "@/components/Spinner";
 import { Toast } from "@/components/Toast";
 import { UpdCard } from "@/components/card/UpdCard";
 import { useLanguage, type TranslationKey } from "@/i18n/LanguageProvider";
+import { barrierPhoto, photoKindsFor } from "@/lib/barrier-photos";
 import { copyText, downloadCardPdf } from "@/lib/card-pdf";
 import type { UpdCard as UpdCardRecord } from "@/lib/cards";
 
@@ -112,6 +115,28 @@ export function CardPreview({ card, qrSvg, justCreated }: Props) {
             </p>
           )}
         </div>
+
+        {photoKindsFor(card.upd_type).length > 0 && (
+          <div className="grid gap-3 sm:grid-cols-2">
+            {photoKindsFor(card.upd_type).map((kind) => {
+              const photo = barrierPhoto(card, kind);
+              const label = kind === "side" ? t("form.sidePhoto") : t("form.rearPhoto");
+              return (
+                <figure key={kind} className="rounded-xl border border-slate-200 bg-white p-3 shadow-sm">
+                  <figcaption className="mb-2 flex items-center justify-between text-sm font-semibold text-slate-700">
+                    {label}
+                    {photo.isDefault && (
+                      <span className="rounded bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500">{t("form.defaultBadge")}</span>
+                    )}
+                  </figcaption>
+                  <a href={photo.url} target="_blank" rel="noopener">
+                    <img src={photo.url} alt={label} className="aspect-[4/3] w-full rounded-md bg-slate-50 object-cover" />
+                  </a>
+                </figure>
+              );
+            })}
+          </div>
+        )}
       </div>
 
       <CardScaler>

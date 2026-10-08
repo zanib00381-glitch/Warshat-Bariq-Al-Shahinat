@@ -1,10 +1,13 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { COMPANY } from "@/config/company";
 import { useLanguage } from "@/i18n/LanguageProvider";
 
 export function SiteFooter() {
   const { t, language } = useLanguage();
+  const pathname = usePathname();
+  if (pathname.startsWith("/verify")) return null; // the record page has its own footer
 
   return (
     <footer className="mt-auto border-t border-brand/15 bg-white text-sm text-slate-600 print:hidden">

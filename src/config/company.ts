@@ -15,11 +15,9 @@ export const COMPANY = {
   logo_card_path: "/logo-card.png",
   // Not present in the reference PDF — fill in, e.g. ["+966 11 000 0000", "+966 50 000 0000"].
   contact_phones: [] as string[],
-  // Shown in the "Company" section of the public verification page.
-  // ⚠ Make sure this is YOUR workshop's address.
-  address_en: "Building 3350, 47725, Saudi Arabia",
-  address_ar: "مبنى 3350، 47725، المملكة العربية السعودية",
-  applicant_type: { en: "Factory", ar: "مصنع", ur: "فیکٹری" },
+  // Shown in the footer of the public record page (empty = not shown).
+  contact_fax: "",
+  contact_email: "",
   // Shown when a card has no uploaded barrier picture. Replace these files (or
   // point to your own photos in /public) to change the default pictures.
   default_barrier_photos: {

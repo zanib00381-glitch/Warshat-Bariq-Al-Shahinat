@@ -35,6 +35,7 @@ function initialValues(): Record<TextFields, string> {
     technical_references: DEFAULT_TECHNICAL_REFERENCES,
     vehicle_model_name: "",
     vehicle_brand: "",
+    vehicle_type: "شاحنة",
     vehicle_model_year: "",
     vehicle_chassis_number: "",
     card_issue_date: today,
@@ -177,6 +178,15 @@ export function CardForm() {
       <Section title={t("form.sectionVehicle")}>
         <Field id="vehicle_model_name" label={t("form.vehicleModelName")} error={errorText(errors.vehicle_model_name)}>
           <input id="vehicle_model_name" dir="auto" required value={values.vehicle_model_name} onChange={set("vehicle_model_name")} className={inputClass(!!errors.vehicle_model_name)} />
+        </Field>
+        <Field id="vehicle_type" label={t("form.vehicleType")} error={errorText(errors.vehicle_type)}>
+          <input id="vehicle_type" dir="auto" list="vehicle-type-options" required value={values.vehicle_type} onChange={set("vehicle_type")} className={inputClass(!!errors.vehicle_type)} />
+          <datalist id="vehicle-type-options">
+            <option value="شاحنة" />
+            <option value="مقطورة" />
+            <option value="نصف مقطورة" />
+            <option value="رأس تريلا" />
+          </datalist>
         </Field>
         <Field id="vehicle_brand" label={t("form.vehicleBrand")} error={errorText(errors.vehicle_brand)}>
           <input id="vehicle_brand" dir="auto" required value={values.vehicle_brand} onChange={set("vehicle_brand")} className={inputClass(!!errors.vehicle_brand)} />

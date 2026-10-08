@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import { COMPANY } from "@/config/company";
 import { getPublicCard } from "@/lib/public-cards";
-import { qrSvgFor } from "@/lib/qr";
 import { CardNotVerified } from "./CardNotVerified";
 import { VerifyView } from "./VerifyView";
 
 export const metadata: Metadata = {
-  title: `UPD card verification | ${COMPANY.name_en}`,
+  // The record page is Arabic-only, like the client's reference page.
+  title: `بطاقة الرقم المميز للحاجز | ${COMPANY.name_ar}`,
   robots: { index: false, follow: false },
 };
 
@@ -29,5 +29,5 @@ export default async function VerifyPage({ params }: PageProps<"/verify/[id]">) 
   const card = await getPublicCard(id);
   if (!card) return <CardNotVerified />;
 
-  return <VerifyView card={card} qrSvg={await qrSvgFor(card.qr_url)} />;
+  return <VerifyView card={card} />;
 }

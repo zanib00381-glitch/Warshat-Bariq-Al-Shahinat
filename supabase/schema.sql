@@ -22,6 +22,7 @@ create table if not exists public.upd_cards (
   -- Vehicle info
   vehicle_model_name       text not null,
   vehicle_brand            text not null,
+  vehicle_type             text not null default 'شاحنة',  -- نوع المركبة
   vehicle_model_year       text not null check (vehicle_model_year ~ '^\d{4}$'),
   upd_type                 text not null check (upd_type ~ '^[SRF](/[SRF]){0,2}$'),
   vehicle_chassis_number   text not null,

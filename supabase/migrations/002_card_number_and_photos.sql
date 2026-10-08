@@ -1,4 +1,4 @@
--- Migration 002: "Barrier Unique ID Card" number + barrier pictures.
+-- Migration 002: "Barrier Unique ID Card" number, barrier pictures and vehicle type.
 -- For databases created from an older schema.sql. Safe to run more than once.
 -- Supabase dashboard → SQL Editor → New query → paste → Run.
 
@@ -25,7 +25,10 @@ end $$;
 alter table public.upd_cards add column if not exists side_photo_url text;
 alter table public.upd_cards add column if not exists rear_photo_url text;
 
--- 3. Public storage bucket for the pictures (max 3 MB, images only).
+-- 3. Vehicle type (نوع المركبة); existing cards become 'شاحنة' (truck).
+alter table public.upd_cards add column if not exists vehicle_type text not null default 'شاحنة';
+
+-- 4. Public storage bucket for the pictures (max 3 MB, images only).
 insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
 values ('barrier-photos', 'barrier-photos', true, 3145728, array['image/jpeg', 'image/png', 'image/webp'])
 on conflict (id) do nothing;

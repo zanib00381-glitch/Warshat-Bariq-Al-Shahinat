@@ -1,0 +1,327 @@
+/*
+ * Public record page (what a scanned QR code opens). Replicates the client's
+ * reference page: white header with a teal top rule, green company band, grey
+ * rounded field boxes with teal labels, and a light-grey contact footer.
+ * Values follow the reference stylesheet; desktop first, compact below 640px.
+ */
+
+.page {
+  flex: 1;
+  width: 100%;
+  background: #edf3f1;
+  padding: 2.5rem 1rem;
+  font-family: var(--font-tajawal), var(--font-arabic), sans-serif;
+}
+
+.sheet {
+  max-width: 760px;
+  margin: 0 auto;
+  overflow: hidden;
+  border-radius: 18px;
+  background: #fff;
+  color: #1a1a1a;
+  box-shadow: 0 22px 55px rgba(22, 58, 52, 0.16);
+}
+
+/* ---------- header ---------- */
+
+.header {
+  padding: 1.4rem 1.8rem 1rem;
+  border-top: 5px solid #097b91;
+  background: #fff;
+  color: #192323;
+  text-align: right;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* = right, the sheet is RTL */
+  gap: 0.5rem;
+  color: #175b63;
+  font-weight: 800;
+  font-size: 0.78rem;
+}
+
+.brand img {
+  height: 31px;
+  width: auto;
+}
+
+.title {
+  margin: 0.65rem 0 0.25rem;
+  font-size: 1.52rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.subtitle {
+  margin: 0;
+  font-weight: 700;
+  font-size: 0.98rem;
+  line-height: 1.45;
+}
+
+/* ---------- green company band ---------- */
+
+.band {
+  margin: 1rem 1.8rem 1.35rem;
+  padding: 1rem 1.15rem;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #00833e, #00a33d);
+  box-shadow: 0 5px 14px rgba(0, 115, 50, 0.18);
+  color: #fff;
+  text-align: right;
+}
+
+.band strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 700;
+}
+
+.band span {
+  display: inline-block;
+  margin-top: 0.65rem;
+  padding: 0.35rem 0.7rem;
+  border-radius: 7px;
+  background: rgba(255, 255, 255, 0.92);
+  color: #222;
+  font-size: 0.8rem;
+}
+
+.band b {
+  margin-right: 0.3rem;
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+/* Red / amber variants for "not verified" and "try again". */
+.bandDanger {
+  background: linear-gradient(135deg, #b42318, #d92d20);
+  box-shadow: 0 5px 14px rgba(180, 35, 24, 0.2);
+}
+
+.bandWarning {
+  background: linear-gradient(135deg, #b54708, #dc6803);
+  box-shadow: 0 5px 14px rgba(181, 71, 8, 0.2);
+}
+
+.band p {
+  margin: 0.55rem 0 0;
+  font-size: 0.92rem;
+  line-height: 1.6;
+}
+
+.bandButton {
+  margin-top: 0.8rem;
+  border: 0;
+  border-radius: 7px;
+  padding: 0.45rem 0.9rem;
+  background: rgba(255, 255, 255, 0.95);
+  color: #222;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ---------- fields ---------- */
+
+.fields {
+  display: grid;
+  gap: 0.88rem;
+  padding: 0 1.8rem 1.5rem;
+}
+
+.field {
+  text-align: right;
+}
+
+.field label,
+.fieldLabel {
+  display: block;
+  margin: 0 0 0.3rem;
+  color: #4e8884;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
+.field output {
+  display: block;
+  width: 100%;
+  min-height: 55px;
+  padding: 0.95rem 1rem;
+  border: 1px solid #e1e1e1;
+  border-radius: 9px;
+  background: #f7f7f7;
+  color: #222;
+  /* Values use Inter (Latin) like the reference; Arabic falls back to Noto Sans Arabic. */
+  font-family: var(--font-inter), var(--font-arabic), sans-serif;
+  font-size: 1rem;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+
+.field output.mono {
+  direction: ltr;
+  unicode-bidi: embed;
+  text-align: right;
+  font-family: var(--font-jbmono), monospace;
+  font-size: 0.88rem;
+  letter-spacing: 0.02em;
+}
+
+/* ---------- footer: light grey with dark navy bars at the bottom ---------- */
+
+.footer {
+  padding: 1.4rem 1.8rem 0;
+  border-top: 2px solid #c4c2bc;
+  background: #dedcd7;
+  color: #555450;
+}
+
+.contacts {
+  display: grid;
+  gap: 0.55rem;
+  max-width: 270px;
+  margin-inline: auto;
+  padding: 0;
+  list-style: none;
+  font-size: 0.95rem;
+}
+
+.contacts li {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  letter-spacing: 0.045em;
+}
+
+.contacts a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.contacts bdi {
+  direction: ltr;
+  unicode-bidi: embed;
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 29px;
+  height: 29px;
+  border-radius: 50%;
+  background: #06375e;
+  box-shadow: inset 0 0 0 2px rgba(119, 206, 248, 0.18);
+  color: #fff;
+}
+
+.icon svg {
+  width: 14px;
+  height: 14px;
+}
+
+.action {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  margin-top: 1rem;
+  border: 1px solid #275578;
+  border-radius: 4px;
+  padding: 0.7rem;
+  background: linear-gradient(180deg, #143a60, #061b33);
+  box-shadow: inset 0 1px rgba(255, 255, 255, 0.2);
+  color: #fff;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.action svg {
+  width: 16px;
+  height: 16px;
+}
+
+.legal {
+  margin: 0.75rem -1.8rem 0;
+  padding: 0.7rem 1rem 0.35rem;
+  border-top: 1px solid rgba(116, 208, 255, 0.4);
+  background: #06223e;
+  text-align: center;
+  font-size: 0.73rem;
+  font-weight: 700;
+}
+
+.bottom {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.65rem;
+  margin: 0 -1.8rem;
+  padding: 0.7rem 0 0.8rem;
+  background: #06223e;
+  color: #d7edf9;
+  font-size: 0.75rem;
+}
+
+.divider {
+  color: #57c8ef;
+}
+
+/* ---------- phones: full-bleed sheet, compact spacing ---------- */
+
+@media (max-width: 640px) {
+  .page {
+    padding: 0;
+  }
+  .sheet {
+    border-radius: 0;
+    box-shadow: none;
+  }
+  .header {
+    padding: 1.1rem 1.15rem 0.85rem;
+  }
+  .title {
+    font-size: 1.3rem;
+  }
+  .subtitle {
+    font-size: 0.88rem;
+  }
+  .band {
+    margin: 0.75rem 1rem 1rem;
+    padding: 0.85rem 0.9rem;
+  }
+  .band strong {
+    font-size: 1.08rem;
+  }
+  .fields {
+    gap: 0.78rem;
+    padding: 0 1rem 1.1rem;
+  }
+  .field label,
+  .fieldLabel {
+    font-size: 0.9rem;
+  }
+  .field output {
+    min-height: 49px;
+    padding: 0.78rem 0.85rem;
+    font-size: 0.92rem;
+  }
+  .footer {
+    padding: 1.1rem 1rem 0;
+  }
+  .contacts {
+    font-size: 0.88rem;
+  }
+  .legal,
+  .bottom {
+    margin-inline: -1rem;
+  }
+}

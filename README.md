@@ -181,13 +181,20 @@ Ways to get the card out:
 ## Barrier Unique ID Card number, company details and pictures
 
 - **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's the big number on the verification page, it's shown in the admin list and search, and **it's the PDF file name** (`3426822545.pdf`).
-- **Company section:** the verification page shows the company's address and applicant type from [`src/config/company.ts`](src/config/company.ts) (`address_en`, `address_ar`, `applicant_type`). ⚠ Make sure the address is your workshop's own.
-- **Barrier pictures:** when **Side** and/or **Rear** is selected in the form, an upload box appears for that picture.
+- **Public record page (what the QR opens):** an Arabic-only page in the layout the client asked for:
+  - a header with the company logo and name,
+  - a green company band showing the UPD manufacture date,
+  - grey field boxes: distinguished number, **vehicle type**, VIN, brand, model, model year,
+  - a light-grey contact footer.
+
+  It doesn't follow the UI language switch, and the site's own header and footer are hidden there. The footer contacts come from `contact_phones`, `contact_fax` and `contact_email` in [`src/config/company.ts`](src/config/company.ts); empty values aren't shown. The "إرسال ملاحظة على السجل" (send feedback) button emails the address set there, or calls the first phone number. Code: [`src/app/verify/[id]/`](src/app/verify/[id]/).
+- **Vehicle type (نوع المركبة):** a form field defaulting to `شاحنة`, with suggestions (مقطورة, نصف مقطورة, رأس تريلا).
+- **Barrier pictures** (shown on the admin preview, not on the public record page): when **Side** and/or **Rear** is selected in the form, an upload box appears for that picture.
   - Photos are shrunk in the browser (max 1600 px, JPEG) before upload.
   - The server checks they're real JPEG/PNG/WEBP files, up to 3 MB, and stores them in the public `barrier-photos` Supabase bucket.
-  - Without an upload, the default picture is shown, labelled "Illustrative image". The defaults are `public/barriers/side-default.svg` and `rear-default.svg`; replace them with your own files, or point `default_barrier_photos` in `company.ts` at different ones.
+  - Without an upload, the default picture is used. The defaults are `public/barriers/side-default.svg` and `rear-default.svg`; replace them with your own files, or point `default_barrier_photos` in `company.ts` at different ones.
 
-**Existing databases:** if your project was set up with an older `schema.sql`, run [`supabase/migrations/002_card_number_and_photos.sql`](supabase/migrations/002_card_number_and_photos.sql) once in the SQL Editor **before deploying this version**. It adds the card number (existing cards get one automatically), the photo columns and the storage bucket. It's safe to run more than once.
+**Existing databases:** if your project was set up with an older `schema.sql`, run [`supabase/migrations/002_card_number_and_photos.sql`](supabase/migrations/002_card_number_and_photos.sql) once in the SQL Editor **before deploying this version**. It adds the card number (existing cards get one automatically), the vehicle type (existing cards become `شاحنة`), the photo columns and the storage bucket. It's safe to run more than once.
 
 ## Distinguished Under-Run Number (16 cells)
 
@@ -208,16 +215,18 @@ Ways to get the card out:
 | `/` | admin | New-card form |
 | `/cards/[id]/preview` | admin | The card, with Copy link, Download PDF, Print and Create another |
 | `/admin/cards` | admin | All cards. Search by chassis number, brand, model or number; each row has View, Copy link and Download PDF |
-| `/verify/[id]` | **public** | Opened by the QR code. Read-only |
+| `/verify/[id]` | **public** | Opened by the QR code. Read-only, Arabic-only record page |
 | `POST /api/cards` | admin | Issues a card: `201 { card, qr_svg }`, or `{ error, field? }` |
 | `GET /api/cards/[id]` | public | A card's public fields. Rate-limited and cacheable |
 | `POST /api/auth/login` / `logout` | public | Start or end an admin session (login is rate-limited) |
 
 What `/verify/[id]` can show:
 
-- **Genuine card:** a green ✅ banner, the card's details, the official card, a Copy-link button and the issuer's contact details.
-- **Unknown id:** a red "this card could not be verified" warning.
-- **Database error:** a neutral "try again" message. It is deliberately **not** shown as a fake card, so an outage can never make a genuine card look forged.
+All three use the same Arabic-only layout (see "Public record page" above):
+
+- **Genuine card:** the green company band and the card's field boxes.
+- **Unknown id:** a red band, "تعذّر التحقق من هذه البطاقة" (this card could not be verified).
+- **Database error:** an amber "try again" band. It is deliberately **not** shown as a fake card, so an outage can never make a genuine card look forged.
 
 Both the genuine and unknown verdicts are fully rendered on the server, so they appear immediately, even without JavaScript. The unknown-id page returns HTTP 200 with `noindex`, not 404: in this Next.js version a segment-level `notFound()` only rendered in the browser.
 
