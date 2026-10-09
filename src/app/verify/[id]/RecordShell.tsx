@@ -26,14 +26,14 @@ export const RECORD_TEXT = {
   retry: "إعادة المحاولة",
 } as const;
 
-/** Page frame: header (logo + titles), the given content, and the blue contact footer. */
+/** Page frame: header (mark + name + titles), the given content, and the contact footer. */
 export function RecordShell({ children, feedbackSubject }: { children: React.ReactNode; feedbackSubject?: string }) {
-  const [phone] = COMPANY.contact_phones;
+  const page = COMPANY.record_page;
   const subject = encodeURIComponent(`${RECORD_TEXT.feedback}${feedbackSubject ? ` — ${feedbackSubject}` : ""}`);
-  const feedbackHref = COMPANY.contact_email
-    ? `mailto:${COMPANY.contact_email}?subject=${subject}`
-    : phone
-      ? `tel:${phone.replace(/\s/g, "")}`
+  const feedbackHref = page.email
+    ? `mailto:${page.email}?subject=${subject}`
+    : page.phone
+      ? `tel:${page.phone.replace(/\s/g, "")}`
       : null;
 
   return (
@@ -45,7 +45,7 @@ export function RecordShell({ children, feedbackSubject }: { children: React.Rea
               <i />
               <b />
             </span>
-            <span>{COMPANY.name_ar}</span>
+            <span>{page.brand}</span>
           </div>
           <h1 className={s.title}>{RECORD_TEXT.title}</h1>
           <p className={s.subtitle}>{RECORD_TEXT.subtitle}</p>
@@ -55,31 +55,31 @@ export function RecordShell({ children, feedbackSubject }: { children: React.Rea
 
         <footer className={s.footer}>
           <ul className={s.contacts}>
-            {COMPANY.contact_phones.map((p) => (
-              <li key={p}>
+            {page.phone && (
+              <li>
                 <span className={s.icon}>
                   <PhoneIcon />
                 </span>
-                <a href={`tel:${p.replace(/\s/g, "")}`}>
-                  <bdi>{p}</bdi>
+                <a href={`tel:${page.phone.replace(/\s/g, "")}`}>
+                  <bdi>{page.phone}</bdi>
                 </a>
               </li>
-            ))}
-            {COMPANY.contact_fax && (
+            )}
+            {page.fax && (
               <li>
                 <span className={s.icon}>
                   <FaxIcon />
                 </span>
-                <bdi>{COMPANY.contact_fax}</bdi>
+                <bdi>{page.fax}</bdi>
               </li>
             )}
-            {COMPANY.contact_email && (
+            {page.email && (
               <li>
                 <span className={s.icon}>
                   <MailIcon />
                 </span>
-                <a href={`mailto:${COMPANY.contact_email}`}>
-                  <bdi>{COMPANY.contact_email}</bdi>
+                <a href={`mailto:${page.email}`}>
+                  <bdi>{page.email}</bdi>
                 </a>
               </li>
             )}
@@ -94,12 +94,12 @@ export function RecordShell({ children, feedbackSubject }: { children: React.Rea
             </button>
           )}
           <div className={s.legal}>
-            © {COMPANY.name_ar} {new Date().getFullYear()}
+            {page.legal} {new Date().getFullYear()}
           </div>
           <div className={s.bottom}>
             <span>{RECORD_TEXT.faq}</span>
             <span className={s.divider}>|</span>
-            <span dir="ltr">{COMPANY.name_en}</span>
+            <span dir="ltr">{page.brand_en}</span>
           </div>
         </footer>
       </div>

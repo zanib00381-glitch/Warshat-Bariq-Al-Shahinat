@@ -202,7 +202,7 @@
 /* ---------- footer: light grey with dark navy bars at the bottom ---------- */
 
 .footer {
-  padding: 1.4rem 1.8rem 0;
+  padding: 1.4rem 1.8rem 1.2rem;
   border-top: 2px solid #c4c2bc;
   background: #dedcd7;
   color: #555450;
@@ -235,6 +235,12 @@
   unicode-bidi: embed;
 }
 
+/* A value that wraps (the long email) fills the row and reads left-aligned, as in the reference. */
+.contacts li > a,
+.contacts li > bdi {
+  text-align: left;
+}
+
 .icon {
   display: grid;
   place-items: center;
@@ -244,7 +250,7 @@
   border-radius: 50%;
   background: #06375e;
   box-shadow: inset 0 0 0 2px rgba(119, 206, 248, 0.18);
-  color: #fff;
+  color: inherit; /* muted glyph on the navy circle, as in the reference */
 }
 
 .icon svg {
@@ -277,7 +283,7 @@
 }
 
 .legal {
-  margin: 0.75rem -1.8rem 0;
+  margin: 0.75rem -1.2rem 0; /* a little wider than the content, as in the reference */
   padding: 0.7rem 1rem 0.35rem;
   border-top: 1px solid rgba(116, 208, 255, 0.4);
   background: #06223e;
@@ -291,8 +297,7 @@
   justify-content: center;
   align-items: center;
   gap: 0.65rem;
-  margin: 0 -1.8rem;
-  padding: 0.7rem 0 0.8rem;
+  padding: 0.7rem 0 0.8rem; /* same width as the content, grey around it */
   background: #06223e;
   color: #d7edf9;
   font-size: 0.75rem;
@@ -347,8 +352,7 @@
   .contacts {
     font-size: 0.88rem;
   }
-  .legal,
-  .bottom {
+  .legal {
     margin-inline: -1rem;
   }
 }

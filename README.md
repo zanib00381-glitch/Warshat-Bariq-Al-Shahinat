@@ -184,14 +184,14 @@ Ways to get the card out:
 
 - **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's shown on the admin preview and in the admin list and search.
 - **Public record page (what the QR opens):** an Arabic-only page in the layout the client asked for:
-  - a header with a small square mark and the company name (top-left), no company logo,
+  - a header with a small square mark and the name "سجل هتان" (top-left), no company logo,
   - a green company band showing the UPD manufacture date,
   - grey field boxes: distinguished number, **vehicle type**, VIN, brand, model, model year,
   - a light-grey contact footer.
 
-  It doesn't follow the UI language switch, and the site's own header and footer are hidden there. The footer contacts come from `contact_phones`, `contact_fax` and `contact_email` in [`src/config/company.ts`](src/config/company.ts); empty values aren't shown. The "إرسال ملاحظة على السجل" (send feedback) button emails the address set there, or calls the first phone number. Code: [`src/app/verify/[id]/`](src/app/verify/[id]/).
+  It doesn't follow the UI language switch, and the site's own header and footer are hidden there. The header name, footer contacts (phone, fax, email) and footer texts live in `record_page` in [`src/config/company.ts`](src/config/company.ts). ⚠ The contact details there are still the placeholders from the reference page, so replace them with real ones. The "إرسال ملاحظة على السجل" (send feedback) button emails that address, or calls the phone. Code: [`src/app/verify/[id]/`](src/app/verify/[id]/).
 - **Vehicle type (نوع المركبة):** a form field defaulting to `شاحنة`, with suggestions (مقطورة, نصف مقطورة, رأس تريلا).
-- **Barrier pictures** (shown on the admin preview, not on the public record page): when **Side** and/or **Rear** is selected in the form, an upload box appears for that picture.
+- **Barrier pictures** (**switched off for now**: set `FEATURES.barrierPhotos` to `true` in `src/config/company.ts` to bring them back; shown on the admin preview, not on the public record page): when **Side** and/or **Rear** is selected in the form, an upload box appears for that picture.
   - Photos are shrunk in the browser (max 1600 px, JPEG) before upload.
   - The server checks they're real JPEG/PNG/WEBP files, up to 3 MB, and stores them in the public `barrier-photos` Supabase bucket.
   - Without an upload, the default picture is used. The defaults are `public/barriers/side-default.svg` and `rear-default.svg`; replace them with your own files, or point `default_barrier_photos` in `company.ts` at different ones.

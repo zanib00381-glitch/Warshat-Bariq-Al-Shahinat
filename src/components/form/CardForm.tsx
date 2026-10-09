@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { DEFAULT_TECHNICAL_REFERENCES } from "@/config/card-template";
-import { COMPANY } from "@/config/company";
+import { COMPANY, FEATURES } from "@/config/company";
 import { ERROR_MESSAGE_KEYS } from "@/i18n/errors";
 import { useLanguage, type TranslationKey } from "@/i18n/LanguageProvider";
 import {
@@ -66,7 +66,8 @@ export function CardForm() {
   const [photoErrors, setPhotoErrors] = useState<Partial<Record<PhotoKind, CardErrorCode>>>({});
 
   const updType = buildUpdType(sides);
-  const photoKinds = photoKindsFor(updType);
+  // Barrier pictures are switched off for now (FEATURES.barrierPhotos).
+  const photoKinds = FEATURES.barrierPhotos ? photoKindsFor(updType) : [];
   // Cheap to recompute; the React Compiler memoizes it anyway.
   const input: CardInput = normalizeCardInput({ ...values, upd_type: updType, under_run_number_suffix: serial.join("") });
   const clientErrors = validateCardInput(input);
@@ -226,30 +227,32 @@ export function CardForm() {
             </span>
           </div>
         </Field>
-        <div className="sm:col-span-2">
-          <p className="mb-2 text-sm font-semibold text-slate-700">{t("form.photosTitle")}</p>
-          {photoKinds.length === 0 ? (
-            <p className="rounded-lg border border-dashed border-slate-300 p-3 text-sm text-slate-500">{t("form.photosNoneNote")}</p>
-          ) : (
-            <>
-              <div className="grid gap-3 lg:grid-cols-2">
-                {photoKinds.map((kind) => (
-                  <BarrierPhotoPicker
-                    key={kind}
-                    kind={kind}
-                    file={photos[kind]}
-                    onChange={(file) => {
-                      setPhotos((p) => ({ ...p, [kind]: file }));
-                      setPhotoErrors(({ [kind]: _removed, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
-                    }}
-                    error={photoErrors[kind] ? t(ERROR_MESSAGE_KEYS[photoErrors[kind]]) : null}
-                  />
-                ))}
-              </div>
-              <p className="mt-1 text-xs text-slate-500">{t("form.photoHint")}</p>
-            </>
+        {FEATURES.barrierPhotos && (
+          <div className="sm:col-span-2">
+            <p className="mb-2 text-sm font-semibold text-slate-700">{t("form.photosTitle")}</p>
+            {photoKinds.length === 0 ? (
+              <p className="rounded-lg border border-dashed border-slate-300 p-3 text-sm text-slate-500">{t("form.photosNoneNote")}</p>
+            ) : (
+              <>
+                <div className="grid gap-3 lg:grid-cols-2">
+                  {photoKinds.map((kind) => (
+                    <BarrierPhotoPicker
+                      key={kind}
+                      kind={kind}
+                      file={photos[kind]}
+                      onChange={(file) => {
+                        setPhotos((p) => ({ ...p, [kind]: file }));
+                        setPhotoErrors(({ [kind]: _removed, ...rest }) => rest); // eslint-disable-line @typescript-eslint/no-unused-vars
+                      }}
+                      error={photoErrors[kind] ? t(ERROR_MESSAGE_KEYS[photoErrors[kind]]) : null}
+                    />
+                  ))}
+                </div>
+                <p className="mt-1 text-xs text-slate-500">{t("form.photoHint")}</p>
+              </>
           )}
         </div>
+        )}
       </Section>
 
       <Section title={t("form.sectionNumber")}>

@@ -10,6 +10,7 @@ import { Spinner } from "@/components/Spinner";
 import { Toast } from "@/components/Toast";
 import { UpdCard } from "@/components/card/UpdCard";
 import { useLanguage, type TranslationKey } from "@/i18n/LanguageProvider";
+import { FEATURES } from "@/config/company";
 import { barrierPhoto, photoKindsFor } from "@/lib/barrier-photos";
 import { copyText, downloadCardPdf } from "@/lib/card-pdf";
 import type { UpdCard as UpdCardRecord } from "@/lib/cards";
@@ -116,7 +117,7 @@ export function CardPreview({ card, qrSvg, justCreated }: Props) {
           )}
         </div>
 
-        {photoKindsFor(card.upd_type).length > 0 && (
+        {FEATURES.barrierPhotos && photoKindsFor(card.upd_type).length > 0 && (
           <div className="grid gap-3 sm:grid-cols-2">
             {photoKindsFor(card.upd_type).map((kind) => {
               const photo = barrierPhoto(card, kind);
