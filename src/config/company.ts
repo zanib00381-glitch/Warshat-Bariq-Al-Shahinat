@@ -11,8 +11,6 @@ export const COMPANY = {
   country_of_origin_ar: "السعودية",
   country_of_origin_en: "Saudi Arabia",
   logo_path: "/logo.png",
-  // Downscaled copy of the logo, used in the header of the public record page.
-  logo_card_path: "/logo-card.png",
   // Not present in the reference PDF — fill in, e.g. ["+966 11 000 0000", "+966 50 000 0000"].
   contact_phones: [] as string[],
   // Shown in the footer of the public record page (empty = not shown).

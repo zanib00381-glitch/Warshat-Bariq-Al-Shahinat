@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element -- small static logo; keeps this component usable from client error boundaries */
 import { COMPANY } from "@/config/company";
 import s from "./RecordPage.module.css";
 
@@ -42,7 +41,10 @@ export function RecordShell({ children, feedbackSubject }: { children: React.Rea
       <div className={s.sheet} dir="rtl" lang="ar">
         <header className={s.header}>
           <div className={s.brand}>
-            <img src={COMPANY.logo_card_path} alt="" />
+            <span className={s.mark} aria-hidden>
+              <i />
+              <b />
+            </span>
             <span>{COMPANY.name_ar}</span>
           </div>
           <h1 className={s.title}>{RECORD_TEXT.title}</h1>

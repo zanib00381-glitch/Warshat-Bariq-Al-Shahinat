@@ -184,7 +184,7 @@ Ways to get the card out:
 
 - **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's shown on the admin preview and in the admin list and search.
 - **Public record page (what the QR opens):** an Arabic-only page in the layout the client asked for:
-  - a header with the company logo and name,
+  - a header with a small square mark and the company name (top-left), no company logo,
   - a green company band showing the UPD manufacture date,
   - grey field boxes: distinguished number, **vehicle type**, VIN, brand, model, model year,
   - a light-grey contact footer.

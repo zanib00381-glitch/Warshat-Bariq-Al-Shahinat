@@ -36,16 +36,43 @@
 .brand {
   display: flex;
   align-items: center;
-  justify-content: flex-start; /* = right, the sheet is RTL */
+  justify-content: flex-end; /* = left, the sheet is RTL (as in the reference) */
   gap: 0.5rem;
   color: #175b63;
   font-weight: 800;
   font-size: 0.78rem;
 }
 
-.brand img {
+/* Small square mark: a green "L" corner and a teal bar on a pale tile. */
+.mark {
+  position: relative;
+  flex: none;
+  width: 31px;
   height: 31px;
-  width: auto;
+  overflow: hidden;
+  border: 1px solid #d1e0de;
+  border-radius: 4px;
+  background: #f3f8f7;
+}
+
+.mark i {
+  position: absolute;
+  right: 4px;
+  bottom: 3px;
+  width: 19px;
+  height: 19px;
+  border: 6px solid #087d4a;
+  border-top-color: transparent;
+  border-right-color: transparent;
+}
+
+.mark b {
+  position: absolute;
+  right: 5px;
+  top: 4px;
+  width: 12px;
+  height: 7px;
+  background: #138ca2;
 }
 
 .title {
