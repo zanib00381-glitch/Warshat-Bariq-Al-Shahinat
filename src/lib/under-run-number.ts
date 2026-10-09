@@ -83,3 +83,12 @@ export function buildUnderRunNumber(prefix: string, type: string, suffix: string
 export function formatUnderRunNumberForDisplay(prefix: string, updType: string, suffix: string): string {
   return [prefix.slice(0, 3), prefix.slice(3, 6), updType, suffix.slice(0, 3), suffix.slice(3)].join(" ");
 }
+
+/**
+ * PDF file name for a card: the number as printed after "KSA E30", e.g. "S/R/F AAA 263290".
+ * "/" isn't allowed in file names on any OS (browsers turn it into "_"), so it
+ * becomes "-": "S-R-F AAA 263290".
+ */
+export function pdfFileBaseName(updType: string, suffix: string): string {
+  return `${updType.replaceAll("/", "-")} ${suffix.slice(0, 3)} ${suffix.slice(3)}`;
+}

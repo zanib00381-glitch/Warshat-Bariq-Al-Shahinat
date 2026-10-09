@@ -170,6 +170,8 @@ Connect the phone to the same Wi-Fi and create a new card. If Windows asks, allo
 - **Fonts:** Noto Sans for Latin text and Noto Sans Arabic for Arabic, the same fonts the reference uses.
 - **Accuracy:** printed output was measured against the reference. The median text-baseline error is about 0.2 pt for Latin and 0.6 pt for Arabic (1 pt ≈ 0.35 mm).
 - **Same in every UI language:** verified pixel for pixel.
+- **No logo on the card:** the printed/PDF card has no company logo.
+- **PDF file name:** the number as printed on the card after "KSA E30", e.g. `S-R-F AAA 263290.pdf`. File names can't contain `/`, so it becomes `-`.
 - **Merged cells 8 and 9:** the reference draws them as one box, and the replica copies that. To separate them, remove the `joined`/`joinedLeft` classes.
 
 Ways to get the card out:
@@ -180,7 +182,7 @@ Ways to get the card out:
 
 ## Barrier Unique ID Card number, company details and pictures
 
-- **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's the big number on the verification page, it's shown in the admin list and search, and **it's the PDF file name** (`3426822545.pdf`).
+- **Card number:** every card gets a random **10-digit "Barrier Unique ID Card" number** (e.g. `3426822545`). The database guarantees it's unique. It's shown on the admin preview and in the admin list and search.
 - **Public record page (what the QR opens):** an Arabic-only page in the layout the client asked for:
   - a header with the company logo and name,
   - a green company band showing the UPD manufacture date,

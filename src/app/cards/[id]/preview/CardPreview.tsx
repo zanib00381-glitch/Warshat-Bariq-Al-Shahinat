@@ -45,7 +45,7 @@ export function CardPreview({ card, qrSvg, justCreated }: Props) {
     setPdfBusy(true);
     setStatus({ key: "messages.preparingPdf" });
     try {
-      await downloadCardPdf(cardRef.current, card.card_number);
+      await downloadCardPdf(cardRef.current, card);
       setStatus(null);
     } catch (err) {
       console.error("PDF export failed:", err);

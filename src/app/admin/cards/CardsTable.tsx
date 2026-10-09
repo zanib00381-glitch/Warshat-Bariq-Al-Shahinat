@@ -52,7 +52,7 @@ export function CardsTable({ cards }: { cards: PublicCard[] }) {
   // Once the off-screen card has rendered, export it with the same code as the preview page.
   useEffect(() => {
     if (!exporting || !exportRef.current) return;
-    downloadCardPdf(exportRef.current, exporting.card.card_number)
+    downloadCardPdf(exportRef.current, exporting.card)
       .catch((err) => {
         console.error("PDF export failed:", err);
         setPdfError(true);
